@@ -9,11 +9,15 @@ import {
 
 const initial = {
   favs: [],
+  units: [],
   current: null,
   error: null,
   loading: true,
 };
 
+function writeCurrssToLocalStorage(state) {
+  localStorage.setItem("s10g4", JSON.stringify(state.current));
+}
 function writeFavsToLocalStorage(state) {
   localStorage.setItem("s10g4", JSON.stringify(state.favs));
 }
@@ -31,13 +35,21 @@ export function myReducer(state = initial, action) {
       return state;
 
     case FETCH_SUCCESS:
-      return state;
+      const unisList = action.payload;
+      const rand = Math.floor(Math.random() * unisList.length);
+      const updatesState = {
+        ...state,
+        unis: unisList,
+        current: unisList[rand],
+      };
+      writeCurrssToLocalStorage(updatesState);
+      return updatesState;
 
     case FETCH_LOADING:
-      return state;
+      return { ...state, loading: action.payload };
 
     case FETCH_ERROR:
-      return state;
+      return { ...state, loading: action.payload };
 
     case GET_FAVS_FROM_LS:
       return state;
